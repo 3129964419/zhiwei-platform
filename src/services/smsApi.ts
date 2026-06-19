@@ -4,10 +4,11 @@
  */
 
 // SMS 服务基础 URL
-const SMS_API_BASE = import.meta.env.VITE_SMS_API_URL || '';
+// 使用相对路径，因为 API 和前端部署在同一域名
+const SMS_API_BASE = import.meta.env.VITE_SMS_API_URL || '/api/sms';
 
 // 模拟模式 (开发环境)
-const MOCK_MODE = !SMS_API_BASE || import.meta.env.DEV;
+const MOCK_MODE = import.meta.env.DEV;
 
 /**
  * 发送验证码
@@ -15,7 +16,7 @@ const MOCK_MODE = !SMS_API_BASE || import.meta.env.DEV;
 export async function sendVerificationCode(
   phone: string,
   deviceId?: string
-): Promise<{ success: boolean; message: string; expiresIn?: number; remainingTime?: number }> {
+): Promise<{ success: boolean; message: string; expiresIn?: number; remainingTime?: number; demoCode?: string }> {
   // 手机号格式验证
   if (!/^1[3-9]\d{9}$/.test(phone)) {
     return { success: false, message: '请输入正确的手机号' };
@@ -24,15 +25,18 @@ export async function sendVerificationCode(
   if (MOCK_MODE) {
     // 模拟模式
     await new Promise((resolve) => setTimeout(resolve, 600));
+    const demoCode = '123456';
+    console.log(`[SMS Mock] 验证码: ${demoCode}`);
     return {
       success: true,
       message: '验证码已发送（演示：123456）',
       expiresIn: 300,
+      demoCode,
     };
   }
 
   try {
-    const response = await fetch(`${SMS_API_BASE}/api/sms/send`, {
+    const response = await fetch(`${SMS_API_BASE}/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -48,6 +52,7 @@ export async function sendVerificationCode(
       message: data.message,
       expiresIn: data.expiresIn,
       remainingTime: data.remainingTime,
+      demoCode: data.demoCode,
     };
   } catch (error) {
     console.error('Send code error:', error);
@@ -84,7 +89,7 @@ export async function verifyCode(
   }
 
   try {
-    const response = await fetch(`${SMS_API_BASE}/api/sms/verify`, {
+    const response = await fetch(`${SMS_API_BASE}/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
