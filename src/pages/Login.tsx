@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Phone, Lock, Eye, EyeOff, MessageSquare, Smartphone, AlertCircle, CheckCircle } from 'lucide-react';
+import { Phone, Lock, Eye, EyeOff, MessageSquare, AlertCircle, CheckCircle } from 'lucide-react';
 import { authAPI } from '@/services/auth';
 import { useUserStore } from '@/store/userStore';
 import { useUIStore } from '@/store/uiStore';
 
-type Method = 'code' | 'password' | 'wechat';
+type Method = 'code' | 'password';
 
 interface FieldValidation {
   isValid: boolean | null;
@@ -111,10 +111,8 @@ export default function Login() {
       let user;
       if (method === 'code') {
         user = await authAPI.loginByCode(phone, code);
-      } else if (method === 'password') {
-        user = await authAPI.loginByPassword(phone, password);
       } else {
-        user = await authAPI.wechatLogin();
+        user = await authAPI.loginByPassword(phone, password);
       }
       login(user);
       addToast('success', `欢迎回来，${user.nickname}`);
@@ -165,45 +163,13 @@ export default function Login() {
 
         <div className="glass rounded-4xl p-8 shadow-glow">
           <h1 className="font-display text-3xl font-semibold mb-2">
-            {method === 'wechat' ? '微信登录' : '欢迎回来'}
+            欢迎回来
           </h1>
           <p className="text-sm text-ink-900/60 mb-6">
-            {method === 'wechat'
-              ? '使用微信扫码快速登录'
-              : '使用手机号登录或注册账号'}
+            使用手机号登录或注册账号
           </p>
 
-          {method === 'wechat' ? (
-            <div className="text-center py-8">
-              <div className="inline-block p-4 bg-white rounded-3xl shadow-card relative">
-                <div className="w-44 h-44 bg-gradient-to-br from-ink-50 to-ink-100 rounded-2xl flex items-center justify-center relative overflow-hidden">
-                  <div
-                    className="absolute inset-0 opacity-10"
-                    style={{
-                      backgroundImage: `repeating-linear-gradient(45deg, #1A1B3A 0 1px, transparent 1px 8px), repeating-linear-gradient(-45deg, #1A1B3A 0 1px, transparent 1px 8px)`,
-                    }}
-                  />
-                  <div className="relative text-center">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-mint-400 to-mint-500 mx-auto mb-2 flex items-center justify-center text-white text-2xl">
-                      微
-                    </div>
-                    <p className="text-xs text-ink-900/60">扫码登录</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-ink-900/50 mt-4">
-                打开微信扫一扫，演示环境可点击下方按钮直接登录
-              </p>
-              <button
-                onClick={handleLogin}
-                disabled={loading}
-                className="mt-4 btn-secondary text-sm"
-              >
-                {loading ? '登录中...' : '演示用：直接登录'}
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleLogin} className="space-y-3">
+          <form onSubmit={handleLogin} className="space-y-3">
               <div className="relative">
                 <Phone
                   size={16}
@@ -346,35 +312,18 @@ export default function Login() {
                 {loading ? '登录中...' : method === 'code' ? '登录 / 注册' : '登录'}
               </button>
 
-              <div className="flex items-center gap-3 my-5">
-                <div className="flex-1 h-px bg-ink-100" />
-                <span className="text-xs text-ink-900/40">或</span>
-                <div className="flex-1 h-px bg-ink-100" />
-              </div>
+              <button
+                type="button"
+                onClick={() => setMethod(method === 'code' ? 'password' : 'code')}
+                className="w-full text-xs text-ink-900/50 hover:text-iris-500 transition py-2"
+              >
+                {method === 'code' ? '使用密码登录' : '使用验证码登录'}
+              </button>
 
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => setMethod('wechat')}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full bg-mint-400/10 text-mint-500 font-medium text-sm hover:bg-mint-400/15 transition"
-                >
-                  <Smartphone size={16} /> 微信扫码登录
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setMethod(method === 'code' ? 'password' : 'code')}
-                  className="w-full text-xs text-ink-900/50 hover:text-iris-500 transition py-1"
-                >
-                  {method === 'code' ? '使用密码登录' : '使用验证码登录'}
-                </button>
-              </div>
-
-              <p className="text-[10px] text-ink-900/40 text-center mt-5">
+              <p className="text-[10px] text-ink-900/40 text-center mt-3">
                 演示提示：验证码请使用 <span className="text-iris-500 font-mono">123456</span>
               </p>
             </form>
-          )}
         </div>
 
         <p className="text-center text-xs text-ink-900/50 mt-6">
