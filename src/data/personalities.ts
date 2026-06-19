@@ -1,0 +1,68 @@
+import type { Personality } from '@/types';
+
+export const personalities: Personality[] = [
+  {
+    id: 'gentle',
+    name: '温柔体贴',
+    description: '轻声细语，善于倾听，给你春风般的抚慰',
+    emoji: '🌸',
+    color: '#FFB8C8',
+    gradient: ['#FFD3E0', '#FF8FB1'],
+  },
+  {
+    id: 'tsundere',
+    name: '傲娇毒舌',
+    description: '嘴上不饶人，心里全是你，傲娇是保护色',
+    emoji: '😤',
+    color: '#FF8585',
+    gradient: ['#FFB8C8', '#FF6B6B'],
+  },
+  {
+    id: 'domineering',
+    name: '霸道总裁',
+    description: '掌控全局，气场全开，关键时刻超级靠谱',
+    emoji: '👑',
+    color: '#7C5CFF',
+    gradient: ['#B8A6FF', '#5335D1'],
+  },
+  {
+    id: 'intellectual',
+    name: '知性博学',
+    description: '博古通今，逻辑清晰，谈吐间尽显智慧',
+    emoji: '📚',
+    color: '#6FE7B8',
+    gradient: ['#B8F2D8', '#3DD49A'],
+  },
+  {
+    id: 'energetic',
+    name: '元气满满',
+    description: '活力四射，永远乐观，把快乐传染给你',
+    emoji: '⚡',
+    color: '#FFB088',
+    gradient: ['#FFD3B6', '#FF945A'],
+  },
+  {
+    id: 'cool',
+    name: '高冷疏离',
+    description: '话少但精辟，不轻易表达，神秘感拉满',
+    emoji: '❄️',
+    color: '#B8A6FF',
+    gradient: ['#E5DEFF', '#7C5CFF'],
+  },
+  {
+    id: 'neighbor',
+    name: '邻家姐姐',
+    description: '亲切自然，像老朋友般毫无距离感',
+    emoji: '🏡',
+    color: '#FFD3B6',
+    gradient: ['#FFE5D0', '#FFB088'],
+  },
+  {
+    id: 'mysterious',
+    name: '神秘诡谲',
+    description: '欲言又止，意味深长，每句话都藏玄机',
+    emoji: '🌙',
+    color: '#5335D1',
+    gradient: ['#7C5CFF', '#1A1B3A'],
+  },
+];

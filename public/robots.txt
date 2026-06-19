@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /create
+Disallow: /clone
+Disallow: /agent
+Disallow: /settings
+Disallow: /wechat-bind
+Disallow: /login
+Sitemap: https://zhiwei.ai/sitemap.xml
