@@ -3,6 +3,7 @@ import { storage } from './storage';
 import { delay, generateId } from '@/utils/common';
 import { csrf } from '@/utils/security';
 import { session } from './session';
+import { sendVerificationCode, verifyCode, getDeviceId } from './smsApi';
 
 const USER_KEY = 'currentUser';
 
@@ -17,19 +18,31 @@ const SAMPLE_USERS: User[] = [
 ];
 
 export const authAPI = {
-  async sendCode(phone: string): Promise<{ success: boolean; message?: string }> {
-    await delay(600);
-    if (!/^1[3-9]\d{9}$/.test(phone)) {
-      return { success: false, message: '请输入正确的手机号' };
-    }
-    return { success: true, message: '验证码已发送（演示：123456）' };
+  /**
+   * 发送验证码
+   * 使用真实 SMS 服务或模拟
+   */
+  async sendCode(phone: string): Promise<{ success: boolean; message?: string; expiresIn?: number }> {
+    const deviceId = getDeviceId();
+    return await sendVerificationCode(phone, deviceId);
   },
 
+  /**
+   * 使用验证码登录
+   */
   async loginByCode(phone: string, code: string): Promise<User> {
-    await delay(800);
-    if (code !== '123456' && code !== '000000') {
-      throw new Error('验证码错误，演示请使用 123456');
+    const deviceId = getDeviceId();
+    
+    // 使用真实验证服务
+    const result = await verifyCode(phone, code, deviceId);
+    
+    if (!result.success) {
+      throw new Error(result.message);
     }
+
+    // 模拟延迟
+    await delay(300);
+
     const existing = SAMPLE_USERS.find((u) => u.phone === phone);
     const user: User = existing || {
       id: generateId('user'),
@@ -38,34 +51,25 @@ export const authAPI = {
       avatar: phone.slice(-1),
       createdAt: Date.now(),
     };
+    
     storage.set(USER_KEY, user);
     csrf.refreshToken();
     session.setExpiry(24);
     return user;
   },
 
+  /**
+   * 使用密码登录
+   */
   async loginByPassword(phone: string, password: string): Promise<User> {
     await delay(800);
     if (password.length < 6) throw new Error('密码长度至少 6 位');
     return this.loginByCode(phone, '123456');
   },
 
-  async wechatLogin(): Promise<User> {
-    await delay(1200);
-    const user: User = {
-      id: generateId('user'),
-      phone: '13900139000',
-      nickname: '微信用户',
-      avatar: '微',
-      wechatOpenid: generateId('wx'),
-      createdAt: Date.now(),
-    };
-    storage.set(USER_KEY, user);
-    csrf.refreshToken();
-    session.setExpiry(24);
-    return user;
-  },
-
+  /**
+   * 获取当前登录用户
+   */
   getCurrent(): User | null {
     if (session.isExpired()) {
       this.logout();
@@ -74,16 +78,25 @@ export const authAPI = {
     return storage.get<User | null>(USER_KEY, null);
   },
 
+  /**
+   * 登出
+   */
   logout(): void {
     storage.remove(USER_KEY);
     csrf.clearToken();
     session.clear();
   },
 
+  /**
+   * 更新用户信息
+   */
   updateUser(user: User): void {
     storage.set(USER_KEY, user);
   },
 
+  /**
+   * 获取所有用户
+   */
   getAll(): User[] {
     return [storage.get<User | null>(USER_KEY, null)].filter(Boolean) as User[];
   },

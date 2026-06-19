@@ -1,0 +1,32 @@
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 日志
+logs/
+*.log
+npm-debug.log*
+
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 测试覆盖率
+coverage/
+
+# Docker
+.dockerignore
