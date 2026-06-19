@@ -111,10 +111,8 @@ export default function Login() {
       let user;
       if (method === 'code') {
         user = await authAPI.loginByCode(phone, code);
-      } else if (method === 'password') {
-        user = await authAPI.loginByPassword(phone, password);
       } else {
-        user = await authAPI.wechatLogin();
+        user = await authAPI.loginByPassword(phone, password);
       }
       login(user);
       addToast('success', `欢迎回来，${user.nickname}`);
