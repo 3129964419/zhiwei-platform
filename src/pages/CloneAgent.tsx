@@ -174,10 +174,32 @@ export default function CloneAgent() {
             >
               <ArrowLeft size={18} />
             </button>
-            <h1 className="font-display text-2xl font-semibold flex items-center gap-2">
-              <Wand2 size={22} className="text-iris-500" /> 角色复刻
-            </h1>
+            <div className="text-center">
+              <h1 className="font-display text-2xl font-semibold flex items-center justify-center gap-2">
+                <Wand2 size={22} className="text-iris-500" /> 数字孪生体复刻
+              </h1>
+              <p className="text-xs text-ink-900/50 mt-0.5">只需3分钟，让TA重新回到你身边</p>
+            </div>
             <div className="w-10" />
+          </div>
+
+          {/* 进度提示 */}
+          <div className="glass rounded-2xl p-3 mb-6 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-iris-500 to-rose-400 flex items-center justify-center text-white text-xs font-bold">
+                {files.length > 0 ? '2' : '1'}
+              </div>
+              <div className="text-xs">
+                <span className="font-medium text-ink-900">{files.length > 0 ? 'AI分析中' : '上传聊天记录'}</span>
+                <span className="text-ink-900/50"> · 下一步：开始对话</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-mint-500 font-medium">3分钟</span>
+              <svg className="w-4 h-4 text-mint-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
           </div>
 
           {analyzing ? (
@@ -386,10 +408,36 @@ export default function CloneAgent() {
                 </button>
               </div>
 
-              <div className="mt-6 text-center text-[10px] text-ink-900/40 leading-relaxed">
-                上传的图片仅在本地处理，AI 分析完成后可立即清除
-                <br />
-                我们承诺不保存、不上传、不分享您的聊天记录
+              <div className="mt-6">
+                <div className="glass rounded-3xl p-4 bg-gradient-to-br from-mint-400/5 to-iris-500/5 border border-mint-400/10">
+                  <div className="flex items-center gap-2 mb-3">
+                    <svg className="w-5 h-5 text-mint-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span className="text-xs font-semibold text-mint-700">隐私安全保障</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center gap-2 text-xs text-ink-900/60">
+                      <Check size={12} className="text-mint-500" />
+                      <span>端到端加密</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-ink-900/60">
+                      <Check size={12} className="text-mint-500" />
+                      <span>本地处理</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-ink-900/60">
+                      <Check size={12} className="text-mint-500" />
+                      <span>阅后即焚</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-ink-900/60">
+                      <Check size={12} className="text-mint-500" />
+                      <span>绝不共享数据</span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-ink-900/40 text-center mt-3">
+                    我们承诺不保存、不上传、不分享您的聊天记录，分析完成后数据自动清除
+                  </p>
+                </div>
               </div>
             </>
           )}

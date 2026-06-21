@@ -278,6 +278,38 @@ export default function CommunityMarket() {
         ))}
       </div>
 
+      {/* 创作者激励体系 */}
+      <div className="mt-8 glass rounded-3xl p-5 bg-gradient-to-br from-iris-500/5 to-rose-400/5 border border-iris-200/50">
+        <div className="flex items-center gap-2 mb-4">
+          <svg className="w-5 h-5 text-iris-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          <span className="font-semibold text-ink-900">创作者激励计划</span>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center">
+            <div className="text-lg font-bold text-gradient mb-1">¥</div>
+            <p className="text-xs text-ink-900/60">收益分成</p>
+          </div>
+          <div className="text-center">
+            <div className="text-lg font-bold text-gradient mb-1">🎁</div>
+            <p className="text-xs text-ink-900/60">专属权益</p>
+          </div>
+          <div className="text-center">
+            <div className="text-lg font-bold text-gradient mb-1">🌟</div>
+            <p className="text-xs text-ink-900/60">流量扶持</p>
+          </div>
+        </div>
+        <p className="text-xs text-ink-900/50 text-center mt-3">
+          创建热门智能体，享受收益分成与平台扶持
+        </p>
+        <div className="text-center mt-4">
+          <button className="px-4 py-1.5 rounded-full bg-gradient-to-r from-iris-500 to-rose-400 text-white text-xs font-medium hover:shadow-lg transition-all">
+            成为创作者 →
+          </button>
+        </div>
+      </div>
+
       {/* 查看更多 */}
       <div className="text-center mt-8">
         <button className="px-6 py-2.5 rounded-full border border-ink-200 text-ink-900 font-medium hover:bg-ink-50 transition-all">

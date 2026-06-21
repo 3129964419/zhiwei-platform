@@ -56,6 +56,8 @@ export default function AgentChat() {
   const [typing, setTyping] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [readCount, setReadCount] = useState(0);
+  const [sessionMinutes, setSessionMinutes] = useState(0);
+  const [showReminder, setShowReminder] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -84,6 +86,22 @@ export default function AgentChat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, typing, scrollToBottom]);
+
+  // 防沉迷计时器
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSessionMinutes((prev) => {
+        const newTime = prev + 1;
+        // 每30分钟显示一次提醒
+        if (newTime === 30 || newTime === 60 || newTime === 90) {
+          setShowReminder(true);
+        }
+        return newTime;
+      });
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const markAsRead = useCallback(() => {
     if (!scrollContainerRef.current) return;
@@ -210,6 +228,29 @@ export default function AgentChat() {
     setMenuOpen(false);
   };
 
+  const handleShare = async () => {
+    if (!agent) return;
+    
+    const shareUrl = `${window.location.origin}/clone?share=${agent.id}`;
+    const shareText = `我创建了一个数字孪生体「${agent.name}」，快来看看有多像！`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `智微 - ${agent.name} 的数字孪生体`,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (err) {
+        console.log('Share cancelled');
+      }
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      addToast('success', '分享链接已复制到剪贴板');
+    }
+    setMenuOpen(false);
+  };
+
   const handleDeleteMessage = async (msgId: string) => {
     const allMessages = await agentAPI.getMessages(agent!.id);
     const filtered = allMessages.filter(m => m.id !== msgId);
@@ -281,6 +322,14 @@ export default function AgentChat() {
                     >
                       <MessageCircle size={14} /> 查看资料
                     </Link>
+                    <button
+                      onClick={handleShare}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-ink-900/80 hover:bg-ink-50"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg> 分享智能体
+                    </button>
                     <button
                       onClick={handleExport}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-ink-900/80 hover:bg-ink-50"
@@ -407,6 +456,21 @@ export default function AgentChat() {
                 内容规范
               </Link>
             </p>
+
+            {/* 防沉迷提醒 */}
+            {showReminder && (
+              <div className="mt-3 glass rounded-xl p-3 flex items-center gap-2 bg-amber-400/5 border border-amber-400/10">
+                <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-xs text-amber-700">
+                  已连续对话 {Math.floor(sessionMinutes)} 分钟，记得休息一下哦~
+                </span>
+                <button onClick={() => setShowReminder(false)} className="ml-auto text-amber-500">
+                  <X size={12} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
