@@ -1,7 +1,4 @@
-import { getKV, KEYS, CONFIG, validatePhone, getClientIP } from './utils';
-
 export default async function handler(req, res) {
-  // 设置 CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -17,8 +14,7 @@ export default async function handler(req, res) {
   try {
     const { phone, code } = req.body || {};
 
-    // 验证手机号
-    if (!phone || !validatePhone(phone)) {
+    if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
       return res.status(400).json({
         success: false,
         message: '请输入正确的手机号',
@@ -26,7 +22,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // 验证验证码格式
     if (!code || !/^\d{6}$/.test(code)) {
       return res.status(400).json({
         success: false,
@@ -35,11 +30,13 @@ export default async function handler(req, res) {
       });
     }
 
-    const ip = getClientIP(req);
-    const storage = await getKV();
+    const { createClient } = await import('@vercel/kv');
+    const kv = createClient({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
 
-    // 检查手机号是否被锁定
-    const isLocked = await storage.get(KEYS.phoneLock(phone));
+    const isLocked = await kv.get(`phone:lock:${phone}`);
     if (isLocked) {
       return res.status(429).json({
         success: false,
@@ -48,9 +45,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 获取存储的验证码
-    const storedCode = await storage.get(KEYS.smsCode(phone));
-
+    const storedCode = await kv.get(`sms:code:${phone}`);
     if (!storedCode) {
       return res.status(400).json({
         success: false,
@@ -59,40 +54,32 @@ export default async function handler(req, res) {
       });
     }
 
-    // 验证验证码
-    if (storedCode !== code) {
-      // 增加错误次数
-      const attemptsKey = KEYS.smsAttempts(phone);
-      let attempts = (await storage.get(attemptsKey)) || 0;
-      attempts = parseInt(attempts) + 1;
-      await storage.set(attemptsKey, attempts.toString(), { ex: CONFIG.lockDuration });
-
-      // 超过5次错误，锁定手机号
-      if (attempts >= CONFIG.maxVerifyAttempts) {
-        await storage.set(KEYS.phoneLock(phone), 'locked', { ex: CONFIG.lockDuration });
-        await storage.del(KEYS.smsCode(phone));
-        
+    if (storedCode.toString() !== code) {
+      const attempts = await kv.get(`sms:attempts:${phone}`);
+      const newAttempts = attempts ? parseInt(attempts) + 1 : 1;
+      
+      if (newAttempts >= 5) {
+        await kv.set(`phone:lock:${phone}`, '1', { ex: 900 });
+        await kv.del(`sms:code:${phone}`);
         return res.status(429).json({
           success: false,
-          message: '验证码错误次数过多，账号已锁定15分钟',
-          code: 'MAX_ATTEMPTS_EXCEEDED',
-          lockedUntil: Date.now() + CONFIG.lockDuration * 1000,
+          message: '验证码错误次数过多，账号已被锁定',
+          code: 'PHONE_LOCKED',
         });
       }
-
+      
+      await kv.set(`sms:attempts:${phone}`, newAttempts.toString(), { ex: 300 });
       return res.status(400).json({
         success: false,
-        message: `验证码错误，剩余${CONFIG.maxVerifyAttempts - attempts}次机会`,
-        code: 'WRONG_CODE',
-        remainingAttempts: CONFIG.maxVerifyAttempts - attempts,
+        message: `验证码错误，还剩${5 - newAttempts}次机会`,
+        code: 'INVALID_CODE',
+        remainingAttempts: 5 - newAttempts,
       });
     }
 
-    // 验证成功
-    await storage.del(KEYS.smsCode(phone));
-    await storage.del(KEYS.smsAttempts(phone));
+    await kv.del(`sms:code:${phone}`);
+    await kv.del(`sms:attempts:${phone}`);
 
-    // 生成临时 token
     const token = Buffer.from(`${phone}:${Date.now()}`).toString('base64');
 
     return res.status(200).json({

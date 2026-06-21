@@ -1,5 +1,3 @@
-import { getKV, KEYS, CONFIG, validatePhone, getClientIP, generateCode } from './utils';
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -16,7 +14,7 @@ export default async function handler(req, res) {
   try {
     const { phone } = req.body || {};
 
-    if (!phone || !validatePhone(phone)) {
+    if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
       return res.status(400).json({
         success: false,
         message: '请输入正确的手机号',
@@ -24,10 +22,13 @@ export default async function handler(req, res) {
       });
     }
 
-    const ip = getClientIP(req);
+    const { createClient } = await import('@vercel/kv');
+    const kv = createClient({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
 
-    const storage = await getKV();
-    const isLocked = await storage.get(KEYS.phoneLock(phone));
+    const isLocked = await kv.get(`phone:lock:${phone}`);
     if (isLocked) {
       return res.status(429).json({
         success: false,
@@ -36,30 +37,28 @@ export default async function handler(req, res) {
       });
     }
 
-    const lastSend = await storage.get(KEYS.smsSendTime(phone));
+    const lastSend = await kv.get(`sms:send:${phone}`);
     if (lastSend) {
       const elapsed = (Date.now() - parseInt(lastSend)) / 1000;
-      if (elapsed < CONFIG.sendInterval) {
+      if (elapsed < 60) {
         return res.status(429).json({
           success: false,
-          message: `请${Math.ceil(CONFIG.sendInterval - elapsed)}秒后再试`,
+          message: `请${Math.ceil(60 - elapsed)}秒后再试`,
           code: 'SEND_RATE_LIMIT',
-          remainingTime: Math.ceil(CONFIG.sendInterval - elapsed),
+          remainingTime: Math.ceil(60 - elapsed),
         });
       }
     }
 
-    const code = generateCode();
+    const code = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
 
-    await storage.set(KEYS.smsCode(phone), code, { ex: CONFIG.codeExpiry });
-    await storage.set(KEYS.smsSendTime(phone), Date.now().toString(), { ex: CONFIG.sendInterval });
-
-    console.log(`[SMS] 发送验证码 ${code} 到 ${phone}`);
+    await kv.set(`sms:code:${phone}`, code, { ex: 300 });
+    await kv.set(`sms:send:${phone}`, Date.now().toString(), { ex: 60 });
 
     return res.status(200).json({
       success: true,
       message: '验证码已发送',
-      expiresIn: CONFIG.codeExpiry,
+      expiresIn: 300,
       ...(process.env.NODE_ENV !== 'production' && { demoCode: code }),
     });
   } catch (error) {
