@@ -10,10 +10,7 @@ export default async function handler(req, res) {
   try {
     const { createClient } = await import('@vercel/kv');
     
-    const kv = createClient({
-      url: process.env.KV_REST_API_URL,
-      token: process.env.KV_REST_API_TOKEN,
-    });
+    const kv = createClient();
 
     const testKey = 'test:kv:connection';
     const testValue = `test-${Date.now()}`;
