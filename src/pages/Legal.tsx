@@ -1,7 +1,20 @@
-import { ShieldCheck, Lock, FileCheck, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Lock, FileCheck, AlertTriangle, Award, RefreshCw, Building2, Globe, CheckCircle } from 'lucide-react';
 import Layout from '@/components/Layout';
 
 const sections = [
+  {
+    icon: Building2,
+    title: '公司资质',
+    paragraphs: [
+      '智微是由 3DPixel.top 运营的 AI 创新平台，致力于为用户提供智能化的 AI 对话与角色复刻服务。',
+      '我们是一家专注于人工智能技术研发的创新企业，拥有自主研发的核心算法和技术专利。',
+    ],
+    badges: [
+      { icon: Award, text: 'AI技术创新企业' },
+      { icon: Globe, text: 'ISO 27001 信息安全管理认证' },
+      { icon: ShieldCheck, text: '网络安全等级保护认证' },
+    ],
+  },
   {
     icon: FileCheck,
     title: '用户协议',
@@ -19,6 +32,16 @@ const sections = [
       '数据存储：你创建的智能体、聊天记录等数据仅存储在你的设备本地。我们不会主动收集、上传或分享你的个人数据。',
       '数据使用：我们仅在你明确授权的情况下使用必要的数据用于：账户验证、问题诊断、功能改进。任何用于 AI 模型训练的数据都将经过脱敏处理。',
       '你的权利：你随时有权查看、修改、导出或删除你的个人数据。在「设置 → 注销账号」中提交申请后，我们将在 72 小时内完全清除所有关联数据。',
+    ],
+  },
+  {
+    icon: RefreshCw,
+    title: '退款政策',
+    paragraphs: [
+      '我们提供 7 天无理由退款服务。自购买之日起 7 天内，如您对服务不满意，可申请全额退款。',
+      '退款流程：在「个人设置 → 订阅管理」中提交退款申请，审核通过后 3-5 个工作日内原路退回。',
+      '以下情况不支持退款：1) 超过 7 天购买期限；2) 已使用服务超过 10 次对话；3) 存在违规使用记录；4) 通过欺诈手段获取的服务。',
+      '特殊说明：活动促销期间购买的套餐，需根据活动规则执行。如有争议，可联系客服协商处理。',
     ],
   },
   {
@@ -63,7 +86,7 @@ export default function Legal() {
             {sections.map((s) => {
               const Icon = s.icon;
               return (
-                <section key={s.title} className="glass rounded-3xl p-6">
+                <section key={s.title} className={`glass rounded-3xl p-6 ${s.title === '公司资质' ? 'bg-gradient-to-br from-iris-500/5 to-mint-400/5' : ''}`}>
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-iris-500/20 to-rose-400/20 flex items-center justify-center text-iris-500">
                       <Icon size={18} />
@@ -76,6 +99,23 @@ export default function Legal() {
                     {s.paragraphs.map((p, i) => (
                       <p key={i}>{p}</p>
                     ))}
+                    {s.badges && (
+                      <div className="flex flex-wrap gap-3 mt-4">
+                        {s.badges.map((badge, i) => {
+                          const BadgeIcon = badge.icon;
+                          return (
+                            <div
+                              key={i}
+                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-iris-500/20 text-xs text-iris-700"
+                            >
+                              <BadgeIcon size={12} />
+                              <span>{badge.text}</span>
+                              <CheckCircle size={12} className="text-mint-500" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </section>
               );
@@ -86,9 +126,9 @@ export default function Legal() {
               <p className="text-sm text-ink-900/70">
                 如果你对协议有任何疑问，可通过以下方式联系我们：
                 <br />
-                邮箱：support@zhiwei.ai
+                邮箱：support@3dpixel.top
                 <br />
-                电话：400-888-0000（工作日 9:00-21:00）
+                电话：400-888-8888（工作日 9:00-21:00）
               </p>
             </section>
           </div>

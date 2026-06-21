@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import MobileTabBar from './MobileTabBar';
 import Breadcrumb from './Breadcrumb';
+import AITermsGlossary from './AITermsGlossary';
 
 interface LayoutProps {
   children: ReactNode;
@@ -23,6 +24,7 @@ export default function Layout({ children, showFooter = true, noPadding = false,
         </div>
       )}
       <MobileTabBar />
+      <AITermsGlossary />
     </div>
   );
 }
