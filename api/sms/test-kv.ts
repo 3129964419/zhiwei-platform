@@ -11,8 +11,8 @@ export default async function handler(req, res) {
     const { createClient } = await import('@vercel/kv');
     
     const kv = createClient({
-      url: process.env.KV_URL || process.env.KV_REST_API_URL,
-      token: process.env.KV_TOKEN || process.env.KV_REST_API_TOKEN,
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
     });
 
     const testKey = 'test:kv:connection';
