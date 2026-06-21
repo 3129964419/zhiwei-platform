@@ -213,6 +213,99 @@ export default function Pricing() {
               </div>
             ))}
           </div>
+
+          {/* 会员专属功能 */}
+          <div className="mt-16">
+            <div className="text-center mb-8">
+              <h2 className="font-display text-2xl font-semibold mb-2">
+                升级解锁
+                <span className="text-gradient ml-2">Pro会员专属</span>
+              </h2>
+              <p className="text-sm text-ink-900/60">
+                让你的数字孪生体更加聪明、更有灵魂
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-5">
+              {/* 高级模型 */}
+              <div className="glass rounded-3xl p-6 hover:shadow-card transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-iris-500/20 to-purple-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Sparkles size={24} className="text-iris-500" />
+                </div>
+                <h3 className="font-semibold text-ink-900 mb-2">高级情感模型</h3>
+                <p className="text-sm text-ink-900/60 mb-3">
+                  使用更大参数量的情感模型，逻辑更强、记忆更长、语气更像
+                </p>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="px-2 py-1 rounded-full bg-iris-100 text-iris-600">Pro专属</span>
+                  <span className="text-ink-900/40">vs 基础模型</span>
+                </div>
+              </div>
+
+              {/* 语音通话 */}
+              <div className="glass rounded-3xl p-6 hover:shadow-card transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500/20 to-orange-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-ink-900 mb-2">语音通话</h3>
+                <p className="text-sm text-ink-900/60 mb-3">
+                  用TA的声音说晚安，支持语音克隆和实时对话
+                </p>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="px-2 py-1 rounded-full bg-rose-100 text-rose-600">Pro专属</span>
+                  <span className="text-ink-900/40">文字→语音</span>
+                </div>
+              </div>
+
+              {/* 无限记忆 */}
+              <div className="glass rounded-3xl p-6 hover:shadow-card transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-mint-500/20 to-teal-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 text-mint-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-ink-900 mb-2">无限记忆容量</h3>
+                <p className="text-sm text-ink-900/60 mb-3">
+                  记住所有重要时刻，永久保存你的珍贵回忆
+                </p>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="px-2 py-1 rounded-full bg-mint-100 text-mint-600">Pro专属</span>
+                  <span className="text-ink-900/40">100条→无限</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 常见问题 */}
+          <div className="mt-16 max-w-2xl mx-auto">
+            <div className="text-center mb-6">
+              <h2 className="font-display text-2xl font-semibold mb-2">
+                常见问题
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {[
+                { q: '订阅后可以退款吗？', a: '7天内可申请全额退款，详见退款政策' },
+                { q: '如何取消订阅？', a: '随时可在设置中取消，取消后仍可使用至到期日' },
+                { q: '免费版有什么限制？', a: '每日50条对话限制，基础情感模型，无语音功能' },
+                { q: '升级后AI会变得更像吗？', a: '是的，Pro版本使用更大的情感模型，记忆更长、语气更真实' },
+              ].map((faq, i) => (
+                <details key={i} className="glass rounded-2xl group">
+                  <summary className="p-4 cursor-pointer list-none flex items-center justify-between">
+                    <span className="font-medium text-ink-900">{faq.q}</span>
+                    <svg className="w-5 h-5 text-ink-900/40 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <div className="px-4 pb-4 text-sm text-ink-900/60">
+                    {faq.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
