@@ -3,9 +3,6 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rootDirectory": ".",
-  "rewrites": [
-    { "source": "/api/sms/(.*)", "destination": "/api/sms/$1" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
