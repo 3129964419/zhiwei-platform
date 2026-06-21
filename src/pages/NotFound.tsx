@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Home, Sparkles } from 'lucide-react';
+import { Home, Sparkles, Search, BookOpen, MessageCircle, Settings } from 'lucide-react';
 import Layout from '@/components/Layout';
 
 export default function NotFound() {
@@ -22,9 +22,34 @@ export default function NotFound() {
             <br />
             或者从未存在过
           </p>
-          <Link to="/" className="btn-primary inline-flex items-center gap-2">
-            <Home size={16} /> 回到首页
-          </Link>
+
+          <div className="relative mb-6">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-900/40" />
+            <input
+              type="text"
+              placeholder="搜索你想要的内容..."
+              className="w-full px-10 py-2.5 bg-white/80 backdrop-blur-sm border border-ink-900/10 rounded-full text-sm placeholder:text-ink-900/40 focus:outline-none focus:border-iris-500/50 focus:ring-2 focus:ring-iris-500/20 transition-all"
+            />
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <Link to="/" className="btn-secondary inline-flex items-center gap-2">
+              <Home size={16} /> 回到首页
+            </Link>
+            <Link to="/dashboard" className="btn-secondary inline-flex items-center gap-2">
+              <MessageCircle size={16} /> AI对话
+            </Link>
+            <Link to="/help" className="btn-secondary inline-flex items-center gap-2">
+              <BookOpen size={16} /> 帮助中心
+            </Link>
+            <Link to="/settings" className="btn-secondary inline-flex items-center gap-2">
+              <Settings size={16} /> 设置
+            </Link>
+          </div>
+
+          <p className="text-xs text-ink-900/40">
+            找不到想要的内容？联系我们：support@3dpixel.top
+          </p>
         </div>
       </div>
     </Layout>

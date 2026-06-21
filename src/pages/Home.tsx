@@ -405,6 +405,68 @@ export default function Home() {
               user={user}
               onNavigate={handleNavigate}
             />
+
+            {/* 用户案例 */}
+            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 shadow-card">
+              <div className="text-center mb-6">
+                <h2 className="font-display text-xl sm:text-2xl font-semibold text-ink-900 mb-2">
+                  用户<span className="text-gradient">案例</span>
+                </h2>
+                <p className="text-sm text-ink-900/50">听听他们怎么说</p>
+              </div>
+              <div className="grid gap-4">
+                {[
+                  {
+                    name: '张先生',
+                    role: 'AI开发者',
+                    avatar: '张',
+                    content: '智微帮我快速复刻了一位虚拟助手，效率提升了300%，现在可以专注于更核心的业务逻辑。',
+                    rating: 5,
+                  },
+                  {
+                    name: '李女士',
+                    role: '心理咨询师',
+                    avatar: '李',
+                    content: '通过情感复刻功能，我能够创建个性化的AI心理陪伴，为客户提供更贴心的服务。',
+                    rating: 5,
+                  },
+                  {
+                    name: '王同学',
+                    role: '大学生',
+                    avatar: '王',
+                    content: '用智微创建了专属的学习助手，24小时陪伴学习，再也不怕一个人学习了。',
+                    rating: 5,
+                  },
+                ].map((caseItem, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl p-4 border border-ink-100/50 hover:border-iris-500/20 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-iris-500 to-rose-400 flex items-center justify-center text-white font-semibold text-sm">
+                        {caseItem.avatar}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-medium text-ink-900">{caseItem.name}</span>
+                          <span className="text-xs text-ink-900/40 px-2 py-0.5 rounded-full bg-ink-100">
+                            {caseItem.role}
+                          </span>
+                        </div>
+                        <p className="text-sm text-ink-900/70 leading-relaxed">{caseItem.content}</p>
+                        <div className="flex gap-0.5 mt-2">
+                          {Array.from({ length: caseItem.rating }).map((_, i) => (
+                            <svg key={i} className="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* 管理后台入口 - 隐蔽设计 */}

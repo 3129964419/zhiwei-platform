@@ -182,9 +182,27 @@ export default function Login() {
           </h1>
           <p className="text-sm text-ink-900/60 mb-6">
             {method === 'wechat'
-              ? '使用微信扫码快速登录'
+              ? '使用微信扫码登录您的账户'
               : '使用手机号登录或注册账号'}
           </p>
+
+          <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-iris-500/10 to-rose-400/10 border border-iris-500/20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-iris-500 to-rose-400 flex items-center justify-center text-white">
+                <MessageSquare size={18} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-ink-900">免费体验智微AI</p>
+                <p className="text-xs text-ink-900/50">注册即享3天免费试用，体验全部功能</p>
+              </div>
+              <button
+                onClick={() => navigate('/pricing')}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-iris-500 to-rose-400 text-white text-xs font-medium hover:shadow-lg transition-all"
+              >
+                立即体验
+              </button>
+            </div>
+          </div>
 
           {method === 'wechat' ? (
             <div className="text-center py-8">

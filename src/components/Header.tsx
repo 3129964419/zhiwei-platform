@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/store/userStore';
-import { Sparkles, User, LogOut, Crown } from 'lucide-react';
+import { useDarkModeStore } from '@/store/darkModeStore';
+import { Sparkles, User, LogOut, Crown, Moon, Sun } from 'lucide-react';
 
 interface HeaderProps {
   variant?: 'transparent' | 'solid';
@@ -83,6 +84,13 @@ export default function Header({ variant = 'transparent' }: HeaderProps) {
         <div className="flex items-center gap-2">
           {user ? (
             <>
+              <button
+                onClick={useDarkModeStore((s) => s.toggle)}
+                className="w-9 h-9 rounded-full bg-ink-100/50 flex items-center justify-center text-ink-900/70 hover:bg-ink-100 hover:text-ink-900 transition"
+                title={useDarkModeStore((s) => s.isDark ? '切换到浅色模式' : '切换到深色模式')}
+              >
+                {useDarkModeStore((s) => s.isDark ? <Sun size={16} /> : <Moon size={16} />)}
+              </button>
               <Link
                 to="/pricing"
                 className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-iris-500/10 to-rose-400/10 text-iris-700 text-xs font-medium hover:from-iris-500/15 hover:to-rose-400/15 transition"
