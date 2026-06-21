@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, HelpCircle, Shield, FileText, MessageCircle, Zap } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -45,17 +45,20 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-ink-900 mb-3">支持</h4>
             <ul className="space-y-2 text-sm text-ink-900/60">
               <li>
-                <Link to="/help" className="hover:text-iris-500 transition">
+                <Link to="/help" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <HelpCircle size={14} />
                   帮助中心
                 </Link>
               </li>
               <li>
-                <Link to="/wechat-bind" className="hover:text-iris-500 transition">
+                <Link to="/wechat-bind" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <Zap size={14} />
                   微信集成
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-iris-500 transition">
+                <a href="#" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <MessageCircle size={14} />
                   联系客服
                 </a>
               </li>
@@ -66,17 +69,20 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-ink-900 mb-3">法律</h4>
             <ul className="space-y-2 text-sm text-ink-900/60">
               <li>
-                <Link to="/legal" className="hover:text-iris-500 transition">
+                <Link to="/legal" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <Shield size={14} />
                   隐私政策
                 </Link>
               </li>
               <li>
-                <Link to="/legal" className="hover:text-iris-500 transition">
+                <Link to="/legal" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <FileText size={14} />
                   用户协议
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-iris-500 transition">
+                <a href="#" className="flex items-center gap-2 hover:text-iris-500 transition">
+                  <FileText size={14} />
                   内容规范
                 </a>
               </li>

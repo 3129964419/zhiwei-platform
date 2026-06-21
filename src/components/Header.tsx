@@ -97,6 +97,7 @@ export default function Header({ variant = 'transparent' }: HeaderProps) {
               >
                 <Crown size={14} />
                 升级套餐
+                <span className="text-iris-500/70">¥29/月起</span>
               </Link>
               <div className="relative group">
                 <button className="w-9 h-9 rounded-full bg-gradient-to-br from-iris-500 to-rose-400 flex items-center justify-center text-white font-semibold text-sm shadow-soft hover:shadow-glow transition">

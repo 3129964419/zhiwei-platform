@@ -22,6 +22,8 @@ import {
   X,
 } from 'lucide-react';
 import Layout from '@/components/Layout';
+import DemoChat from '@/components/DemoChat';
+import CommunityMarket from '@/components/CommunityMarket';
 import { useUserStore } from '@/store/userStore';
 import { adminAuthService } from '@/services/adminAuth';
 
@@ -36,6 +38,7 @@ interface FeatureItem {
   gradient: string;
   requireAuth?: boolean;
   isAdmin?: boolean;
+  isHighlight?: boolean;
 }
 
 const featureCategories = {
@@ -53,6 +56,7 @@ const featureCategories = {
         color: 'iris',
         gradient: 'from-iris-500 to-rose-400',
         requireAuth: true,
+        isHighlight: true,
       },
       {
         id: 'create',
@@ -212,10 +216,12 @@ function FeatureButton({
     <button
       onClick={onClick}
       className={`
-        group relative w-full text-left rounded-2xl transition-all duration-100
+        group relative w-full text-left rounded-2xl transition-all duration-300
         ${isWeak
           ? 'bg-ink-50/50 hover:bg-ink-100/50 p-3 sm:p-4'
-          : 'bg-white hover:bg-ink-50 shadow-card hover:shadow-lg p-4 sm:p-5'
+          : feature.isHighlight
+            ? 'bg-white shadow-glow hover:shadow-xl p-4 sm:p-5 animate-float'
+            : 'bg-white hover:bg-ink-50 shadow-card hover:shadow-lg p-4 sm:p-5'
         }
         active:scale-[0.98]
       `}
@@ -224,10 +230,21 @@ function FeatureButton({
       {/* 背景渐变 */}
       <div
         className={`
-          absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-100
+          absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300
           bg-gradient-to-br ${feature.gradient}
         `}
       />
+
+      {/* 高亮功能的光环效果 */}
+      {feature.isHighlight && (
+        <div
+          className={`
+            absolute inset-0 rounded-2xl opacity-30
+            bg-gradient-to-br ${feature.gradient}
+            blur-xl
+          `}
+        />
+      )}
 
       <div className="relative flex items-center gap-3 sm:gap-4">
         {/* 图标 */}
@@ -237,6 +254,7 @@ function FeatureButton({
             bg-gradient-to-br ${feature.gradient}
             ${isWeak ? 'w-9 h-9 sm:w-10 sm:h-10' : 'w-11 h-11 sm:w-12 sm:h-12'}
             text-white shadow-soft
+            ${feature.isHighlight ? 'animate-pulse-glow' : ''}
           `}
         >
           <Icon size={isWeak ? 18 : 22} strokeWidth={2} />
@@ -244,14 +262,22 @@ function FeatureButton({
 
         {/* 文字 */}
         <div className="flex-1 min-w-0">
-          <h3
-            className={`
-              font-semibold truncate
-              ${isWeak ? 'text-sm text-ink-900/70' : 'text-base sm:text-lg text-ink-900'}
-            `}
-          >
-            {feature.label}
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3
+              className={`
+                font-semibold truncate
+                ${isWeak ? 'text-sm text-ink-900/70' : 'text-base sm:text-lg text-ink-900'}
+                ${feature.isHighlight ? 'text-gradient' : ''}
+              `}
+            >
+              {feature.label}
+            </h3>
+            {feature.isHighlight && (
+              <span className="shrink-0 px-2 py-0.5 rounded-full bg-gradient-to-r from-iris-500 to-rose-400 text-white text-[10px] font-medium">
+                核心
+              </span>
+            )}
+          </div>
           <p
             className={`
               truncate
@@ -266,8 +292,9 @@ function FeatureButton({
         <ChevronRight
           size={isWeak ? 16 : 20}
           className={`
-            shrink-0 transition-transform duration-100 group-hover:translate-x-1
+            shrink-0 transition-transform duration-300 group-hover:translate-x-1
             ${isWeak ? 'text-ink-900/30' : 'text-ink-900/40'}
+            ${feature.isHighlight ? 'group-hover:text-iris-500' : ''}
           `}
         />
       </div>
@@ -370,10 +397,10 @@ export default function Home() {
               <span className="text-xs font-medium text-ink-900/80">智微 · AI 情感复刻</span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
-              用AI复刻<span className="text-gradient mx-1">情感</span>，让陪伴永不掉线
+              AI复刻你的<span className="text-gradient mx-1">温度</span>，让爱一直都在
             </h1>
             <p className="text-sm sm:text-base text-ink-900/60 max-w-xl mx-auto mb-6">
-              通过AI技术复刻你的语言风格、思维方式和情感温度，创建永不缺席的24小时专属AI分身
+              用AI留住你独特的语言风格与情感色彩，打造专属的24小时温暖陪伴
             </p>
 
             {/* 核心价值主张 */}
@@ -381,7 +408,8 @@ export default function Home() {
               {[
                 { icon: '🎯', text: '3分钟快速创建' },
                 { icon: '💎', text: '情感复刻度95%+' },
-                { icon: '🔒', text: '数据安全加密' },
+                { icon: '🔒', text: '本地处理 · 端到端加密' },
+                { icon: '🔥', text: '阅后即焚 · 数据可控' },
                 { icon: '🌟', text: '7×24小时陪伴' },
               ].map((item, i) => (
                 <div
@@ -425,6 +453,9 @@ export default function Home() {
             </div>
           </div>
 
+          {/* AI演示对话 */}
+          <DemoChat />
+
           {/* 功能区块 */}
           <div className="space-y-8 sm:space-y-10">
             {/* 核心功能 */}
@@ -454,6 +485,9 @@ export default function Home() {
               onNavigate={handleNavigate}
             />
 
+            {/* 社区市场 */}
+            <CommunityMarket />
+
             {/* 用户案例 */}
             <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 shadow-card">
               <div className="text-center mb-6">
@@ -467,31 +501,55 @@ export default function Home() {
                   {
                     name: '张先生',
                     role: 'AI开发者',
-                    avatar: '张',
-                    content: '智微帮我快速复刻了一位虚拟助手，效率提升了300%，现在可以专注于更核心的业务逻辑。',
+                    avatar: (
+                      <svg viewBox="0 0 40 40" className="w-full h-full">
+                        <circle cx="20" cy="20" r="18" fill="url(#grad1)" />
+                        <circle cx="14" cy="17" r="3" fill="#fff" />
+                        <circle cx="26" cy="17" r="3" fill="#fff" />
+                        <path d="M14 26 Q20 30 26 26" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" />
+                        <defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#9873FF" /><stop offset="100%" stopColor="#FF8DA1" /></linearGradient></defs>
+                      </svg>
+                    ),
+                    content: '智微让我的AI产品有了"灵魂"，复刻的语言风格和情感表达，让用户感觉真的在和人对话。',
                     rating: 5,
                   },
                   {
                     name: '李女士',
                     role: '心理咨询师',
-                    avatar: '李',
-                    content: '通过情感复刻功能，我能够创建个性化的AI心理陪伴，为客户提供更贴心的服务。',
+                    avatar: (
+                      <svg viewBox="0 0 40 40" className="w-full h-full">
+                        <circle cx="20" cy="20" r="18" fill="url(#grad2)" />
+                        <circle cx="14" cy="17" r="3" fill="#fff" />
+                        <circle cx="26" cy="17" r="3" fill="#fff" />
+                        <path d="M14 26 Q20 30 26 26" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" />
+                        <defs><linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#FF8DA1" /><stop offset="100%" stopColor="#FFD8B8" /></linearGradient></defs>
+                      </svg>
+                    ),
+                    content: '为客户创建专属的AI心理陪伴，让温暖的支持随时在线。客户反馈说，感觉被真正理解了。',
                     rating: 5,
                   },
                   {
                     name: '王同学',
                     role: '大学生',
-                    avatar: '王',
-                    content: '用智微创建了专属的学习助手，24小时陪伴学习，再也不怕一个人学习了。',
+                    avatar: (
+                      <svg viewBox="0 0 40 40" className="w-full h-full">
+                        <circle cx="20" cy="20" r="18" fill="url(#grad3)" />
+                        <circle cx="14" cy="17" r="3" fill="#fff" />
+                        <circle cx="26" cy="17" r="3" fill="#fff" />
+                        <path d="M14 26 Q20 30 26 26" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" />
+                        <defs><linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#86EFAC" /><stop offset="100%" stopColor="#9873FF" /></linearGradient></defs>
+                      </svg>
+                    ),
+                    content: '有了智微的学习助手，再也不怕一个人学习了。深夜刷题时，总有温暖的陪伴在身边。',
                     rating: 5,
                   },
                 ].map((caseItem, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-2xl p-4 border border-ink-100/50 hover:border-iris-500/20 transition-colors"
+                    className="bg-white rounded-2xl p-4 border border-ink-100/50 hover:border-iris-500/20 transition-all hover:shadow-card"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-iris-500 to-rose-400 flex items-center justify-center text-white font-semibold text-sm">
+                      <div className="w-12 h-12 rounded-full overflow-hidden bg-ink-50">
                         {caseItem.avatar}
                       </div>
                       <div className="flex-1">
@@ -591,6 +649,20 @@ export default function Home() {
         }
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(152, 115, 255, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(152, 115, 255, 0.5); }
+        }
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
         }
         .safe-area-pb {
           padding-bottom: max(1rem, env(safe-area-inset-bottom));
