@@ -3,10 +3,23 @@ let kv = null;
 export async function getKV() {
   if (!kv) {
     const { createClient } = await import('@vercel/kv');
-    kv = createClient({
-      url: process.env.KV_URL || process.env.KV_REST_API_URL,
-      token: process.env.KV_TOKEN || process.env.KV_REST_API_TOKEN,
-    });
+    
+    let url = process.env.KV_REST_API_URL || '';
+    let token = process.env.KV_REST_API_TOKEN || '';
+    
+    if (!url && !token && process.env.KV_URL) {
+      const kvUrl = process.env.KV_URL;
+      const match = kvUrl.match(/^rediss?:\/\/([^:]+):([^@]+)@([^:]+):(\d+)$/);
+      if (match) {
+        const [, username, password, host, port] = match;
+        url = `https://${host}:${port}`;
+        token = password;
+      } else {
+        url = kvUrl;
+      }
+    }
+    
+    kv = createClient({ url, token });
   }
   return kv;
 }
