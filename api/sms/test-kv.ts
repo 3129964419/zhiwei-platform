@@ -10,7 +10,10 @@ export default async function handler(req, res) {
   try {
     const { createClient } = await import('@vercel/kv');
     
-    const kv = createClient();
+    const kv = createClient({
+      url: process.env.KV_URL || process.env.KV_REST_API_URL,
+      token: process.env.KV_TOKEN || process.env.KV_REST_API_TOKEN,
+    });
 
     const testKey = 'test:kv:connection';
     const testValue = `test-${Date.now()}`;
@@ -22,8 +25,10 @@ export default async function handler(req, res) {
       success: true,
       message: 'KV存储测试成功',
       envVars: {
-        KV_URL: process.env.KV_REST_API_URL ? '配置了' : '未配置',
-        KV_TOKEN: process.env.KV_REST_API_TOKEN ? '配置了' : '未配置',
+        KV_URL: process.env.KV_URL ? '配置了' : '未配置',
+        KV_REST_API_URL: process.env.KV_REST_API_URL ? '配置了' : '未配置',
+        KV_TOKEN: process.env.KV_TOKEN ? '配置了' : '未配置',
+        KV_REST_API_TOKEN: process.env.KV_REST_API_TOKEN ? '配置了' : '未配置',
       },
       testResult: {
         setValue: testValue,

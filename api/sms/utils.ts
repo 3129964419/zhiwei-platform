@@ -3,7 +3,10 @@ let kv = null;
 export async function getKV() {
   if (!kv) {
     const { createClient } = await import('@vercel/kv');
-    kv = createClient();
+    kv = createClient({
+      url: process.env.KV_URL || process.env.KV_REST_API_URL,
+      token: process.env.KV_TOKEN || process.env.KV_REST_API_TOKEN,
+    });
   }
   return kv;
 }
