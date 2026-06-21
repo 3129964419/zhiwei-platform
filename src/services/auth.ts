@@ -22,7 +22,7 @@ export const authAPI = {
    * 发送验证码
    * 使用真实 SMS 服务或模拟
    */
-  async sendCode(phone: string): Promise<{ success: boolean; message?: string; expiresIn?: number }> {
+  async sendCode(phone: string): Promise<{ success: boolean; message?: string; expiresIn?: number; demoCode?: string }> {
     const deviceId = getDeviceId();
     return await sendVerificationCode(phone, deviceId);
   },
