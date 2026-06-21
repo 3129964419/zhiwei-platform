@@ -394,23 +394,23 @@ export default function Home() {
           <div className="text-center mb-8 sm:mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-4">
               <Sparkles size={14} className="text-iris-500" />
-              <span className="text-xs font-medium text-ink-900/80">智微 · AI 情感复刻</span>
+              <span className="text-xs font-medium text-ink-900/80">智微 · 数字孪生体</span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
-              AI复刻你的<span className="text-gradient mx-1">温度</span>，让爱一直都在
+              不只是AI，是<span className="text-gradient mx-1">另一个你</span>
             </h1>
             <p className="text-sm sm:text-base text-ink-900/60 max-w-xl mx-auto mb-6">
-              用AI留住你独特的语言风格与情感色彩，打造专属的24小时温暖陪伴
+              复刻语言风格、思维逻辑与情感内核，创建真正懂你的数字孪生体
             </p>
 
             {/* 核心价值主张 */}
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
-                { icon: '🎯', text: '3分钟快速创建' },
-                { icon: '💎', text: '情感复刻度95%+' },
-                { icon: '🔒', text: '本地处理 · 端到端加密' },
-                { icon: '🔥', text: '阅后即焚 · 数据可控' },
-                { icon: '🌟', text: '7×24小时陪伴' },
+                { icon: '🧠', text: '思维链 · 懂你逻辑' },
+                { icon: '❤️', text: '情感态 · 真实情绪' },
+                { icon: '�', text: '记忆库 · 不忘点滴' },
+                { icon: '🌱', text: '养成系 · 越聊越像' },
+                { icon: '🔒', text: '本地处理 · 隐私安全' },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -425,9 +425,9 @@ export default function Home() {
             {/* 统计数据 */}
             <div className="flex justify-center gap-8 sm:gap-12 mb-6">
               {[
-                { value: '10,000+', label: '用户信赖' },
-                { value: '98.5%', label: '满意度' },
-                { value: '3分钟', label: '快速创建' },
+                { value: '10,000+', label: '数字孪生体' },
+                { value: '95%+', label: '相似度提升' },
+                { value: '养成系', label: '越聊越像' },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
                   <div className="font-display text-2xl sm:text-3xl font-bold text-gradient">{stat.value}</div>
@@ -439,16 +439,16 @@ export default function Home() {
             {/* 行动号召按钮 */}
             <div className="flex justify-center gap-4">
               <button
-                onClick={() => handleNavigate('/pricing', false)}
+                onClick={() => handleNavigate('/clone', true)}
                 className="px-6 py-3 rounded-full bg-gradient-to-r from-iris-500 to-rose-400 text-white font-medium shadow-soft hover:shadow-lg transition-all hover:scale-105"
               >
-                免费试用3天 →
+                开始创建数字孪生体 →
               </button>
               <button
-                onClick={() => handleNavigate('/dashboard', false)}
+                onClick={() => handleNavigate('/help', false)}
                 className="px-6 py-3 rounded-full bg-white/80 backdrop-blur-sm border border-ink-100 text-ink-900 font-medium hover:bg-white transition-all"
               >
-                了解更多
+                了解养成系
               </button>
             </div>
           </div>
