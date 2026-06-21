@@ -28,6 +28,18 @@ export default async function handler(req, res) {
       token: process.env.KV_REST_API_TOKEN,
     });
 
+    const lastSendTime = await kv.get(`sms:send:${phone}`);
+    if (lastSendTime) {
+      const timeDiff = Date.now() - parseInt(lastSendTime.toString());
+      if (timeDiff < 60000) {
+        const remaining = Math.ceil((60000 - timeDiff) / 1000);
+        return res.status(429).json({ 
+          success: false, 
+          message: `发送过于频繁，请${remaining}秒后再试` 
+        });
+      }
+    }
+
     const code = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
     
     await kv.set(`sms:code:${phone}`, code, { ex: 300 });
