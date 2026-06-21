@@ -55,6 +55,30 @@ export default async function handler(req, res) {
     await kv.set(`sms:code:${phone}`, code, { ex: 300 });
     await kv.set(`sms:send:${phone}`, Date.now().toString(), { ex: 60 });
 
+    const secretId = process.env.TENCENT_SMS_SECRET_ID;
+    const secretKey = process.env.TENCENT_SMS_SECRET_KEY;
+    const sdkAppId = process.env.TENCENT_SMS_SDK_APP_ID;
+    const sign = process.env.TENCENT_SMS_SIGN;
+    const templateId = process.env.TENCENT_SMS_TEMPLATE_ID;
+
+    if (secretId && secretKey && sdkAppId && sign && templateId) {
+      const { SmsClient } = await import('tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_client');
+      const smsClient = new SmsClient({
+        credential: {
+          secretId,
+          secretKey,
+        },
+        region: 'ap-beijing',
+      });
+
+      await smsClient.SendSms({
+        PhoneNumberSet: [`+86${phone}`],
+        SignName: sign,
+        TemplateId: templateId,
+        TemplateParamSet: [code, '5'],
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: '验证码已发送',
