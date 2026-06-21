@@ -1,10 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getKV, KEYS, CONFIG, validatePhone, getClientIP } from './utils';
 
-/**
- * 验证验证码 API
- */
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // 设置 CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
