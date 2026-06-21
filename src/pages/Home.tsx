@@ -363,18 +363,66 @@ export default function Home() {
 
         {/* 主内容区 */}
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          {/* 页面标题 */}
+          {/* 页面标题 - 增强版 */}
           <div className="text-center mb-8 sm:mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass mb-4">
               <Sparkles size={14} className="text-iris-500" />
               <span className="text-xs font-medium text-ink-900/80">智微 · AI 情感复刻</span>
             </div>
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold mb-3">
-              功能<span className="text-gradient mx-1">中心</span>
+              用AI复刻<span className="text-gradient mx-1">情感</span>，让陪伴永不掉线
             </h1>
-            <p className="text-sm sm:text-base text-ink-900/60 max-w-md mx-auto">
-              所有功能入口一目了然，快速开始你的 AI 陪伴之旅
+            <p className="text-sm sm:text-base text-ink-900/60 max-w-xl mx-auto mb-6">
+              通过AI技术复刻你的语言风格、思维方式和情感温度，创建永不缺席的24小时专属AI分身
             </p>
+
+            {/* 核心价值主张 */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              {[
+                { icon: '🎯', text: '3分钟快速创建' },
+                { icon: '💎', text: '情感复刻度95%+' },
+                { icon: '🔒', text: '数据安全加密' },
+                { icon: '🌟', text: '7×24小时陪伴' },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-ink-100/50 shadow-soft"
+                >
+                  <span>{item.icon}</span>
+                  <span className="text-sm font-medium text-ink-900">{item.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* 统计数据 */}
+            <div className="flex justify-center gap-8 sm:gap-12 mb-6">
+              {[
+                { value: '10,000+', label: '用户信赖' },
+                { value: '98.5%', label: '满意度' },
+                { value: '3分钟', label: '快速创建' },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="font-display text-2xl sm:text-3xl font-bold text-gradient">{stat.value}</div>
+                  <div className="text-xs text-ink-900/50 mt-1">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* 行动号召按钮 */}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => handleNavigate('/pricing', false)}
+                className="px-6 py-3 rounded-full bg-gradient-to-r from-iris-500 to-rose-400 text-white font-medium shadow-soft hover:shadow-lg transition-all hover:scale-105"
+              >
+                免费试用3天 →
+              </button>
+              <button
+                onClick={() => handleNavigate('/dashboard', false)}
+                className="px-6 py-3 rounded-full bg-white/80 backdrop-blur-sm border border-ink-100 text-ink-900 font-medium hover:bg-white transition-all"
+              >
+                了解更多
+              </button>
+            </div>
           </div>
 
           {/* 功能区块 */}

@@ -43,7 +43,7 @@ export default function Login() {
   const validatePhone = (value: string): FieldValidation => {
     if (!value) return { isValid: null, message: '' };
     if (!/^1[3-9]\d{9}$/.test(value)) {
-      return { isValid: false, message: '请输入正确的手机号格式' };
+      return { isValid: false, message: '📱 手机号格式不正确，请输入11位有效手机号（如138xxxx8888）' };
     }
     return { isValid: true, message: '' };
   };
@@ -51,7 +51,7 @@ export default function Login() {
   const validateCode = (value: string): FieldValidation => {
     if (!value) return { isValid: null, message: '' };
     if (!/^\d{6}$/.test(value)) {
-      return { isValid: false, message: '验证码应为 6 位数字' };
+      return { isValid: false, message: '🔢 验证码格式有误，请输入6位数字验证码' };
     }
     return { isValid: true, message: '' };
   };
@@ -59,9 +59,32 @@ export default function Login() {
   const validatePassword = (value: string): FieldValidation => {
     if (!value) return { isValid: null, message: '' };
     if (value.length < 6) {
-      return { isValid: false, message: '密码至少需要 6 位' };
+      return { isValid: false, message: '🔒 密码强度不足，至少需要6位字符' };
     }
-    return { isValid: true, message: '' };
+    if (value.length < 8) {
+      return { isValid: true, message: '🔐 密码强度：中等（建议8位以上，包含字母和数字）' };
+    }
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+      return { isValid: true, message: '🔐 密码强度：强 ✓' };
+    }
+    return { isValid: true, message: '🔐 密码强度：中等（建议包含大小写字母和数字）' };
+  };
+
+  // 密码强度计算
+  const getPasswordStrength = (value: string): { level: number; text: string; color: string } => {
+    if (!value) return { level: 0, text: '', color: '' };
+    let strength = 0;
+    if (value.length >= 6) strength++;
+    if (value.length >= 8) strength++;
+    if (value.length >= 12) strength++;
+    if (/[a-z]/.test(value)) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/\d/.test(value)) strength++;
+    if (/[^a-zA-Z0-9]/.test(value)) strength++;
+
+    if (strength <= 2) return { level: 1, text: '弱', color: 'bg-coral-400' };
+    if (strength <= 4) return { level: 2, text: '中等', color: 'bg-amber-400' };
+    return { level: 3, text: '强', color: 'bg-mint-400' };
   };
 
   const phoneValidation = validatePhone(phone);
@@ -377,6 +400,28 @@ export default function Login() {
                       <AlertCircle size={12} />
                       {passwordValidation.message}
                     </p>
+                  )}
+                  {password && (
+                    <div className="mt-2">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] text-ink-900/50">密码强度：</span>
+                        <div className="flex-1 h-1.5 bg-ink-100 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full transition-all duration-300 ${getPasswordStrength(password).color}`}
+                            style={{ width: `${(getPasswordStrength(password).level / 3) * 100}%` }}
+                          />
+                        </div>
+                        <span className={`text-[10px] font-medium ${
+                          getPasswordStrength(password).level === 1 ? 'text-coral-500' :
+                          getPasswordStrength(password).level === 2 ? 'text-amber-500' : 'text-mint-500'
+                        }`}>
+                          {getPasswordStrength(password).text}
+                        </span>
+                      </div>
+                      <div className="text-[9px] text-ink-900/30">
+                        建议：8位以上，包含大小写字母和数字
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
