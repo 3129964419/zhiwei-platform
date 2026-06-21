@@ -1,55 +1,50 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, X, ChevronRight, BookOpen, MessageSquare, Users, Wand2 } from 'lucide-react';
 
 interface GuideStep {
-  target: string;
   title: string;
   description: string;
   icon: React.ElementType;
-  position: 'top' | 'bottom' | 'left' | 'right';
+  link?: { to: string; label: string };
 }
 
 const guideSteps: GuideStep[] = [
   {
-    target: 'logo',
     title: '欢迎使用智微AI',
     description: '这里是您的AI智能助手平台，让我们快速了解主要功能',
     icon: Sparkles,
-    position: 'bottom',
   },
   {
-    target: 'nav-dashboard',
     title: 'AI对话',
     description: '与AI进行自然对话，获取智能问答和创作辅助',
     icon: MessageSquare,
-    position: 'bottom',
+    link: { to: '/dashboard', label: '进入对话' },
   },
   {
-    target: 'nav-agents',
     title: '智能体管理',
     description: '创建、编辑和管理您的专属AI智能体',
     icon: Users,
-    position: 'bottom',
+    link: { to: '/dashboard', label: '查看智能体' },
   },
   {
-    target: 'nav-create',
     title: '智能复刻',
     description: '快速复刻一个AI分身，复制您的语言风格和思维方式',
     icon: Wand2,
-    position: 'right',
+    link: { to: '/clone', label: '开始复刻' },
   },
   {
-    target: 'help-button',
     title: 'AI术语解释',
-    description: '点击这里查看AI相关术语的详细解释',
+    description: '遇到不懂的AI术语？随时查阅帮助中心获取详细解释',
     icon: BookOpen,
-    position: 'left',
+    link: { to: '/help', label: '查看帮助' },
   },
 ];
 
 export default function NewUserGuide() {
   const [isVisible, setIsVisible] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const hasSeenGuide = localStorage.getItem('hasSeenGuide');
@@ -61,10 +56,22 @@ export default function NewUserGuide() {
     }
   }, []);
 
+  const currentStepData = guideSteps[currentStep];
+
   const handleClose = () => {
     setIsVisible(false);
     localStorage.setItem('hasSeenGuide', 'true');
   };
+
+  useEffect(() => {
+    if (!isVisible) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible]);
 
   const handleNext = () => {
     if (currentStep < guideSteps.length - 1) {
@@ -78,9 +85,14 @@ export default function NewUserGuide() {
     handleClose();
   };
 
+  const handleGoTo = () => {
+    const link = currentStepData.link;
+    handleClose();
+    if (link) navigate(link.to);
+  };
+
   if (!isVisible) return null;
 
-  const currentStepData = guideSteps[currentStep];
   const Icon = currentStepData.icon;
 
   return (
@@ -132,16 +144,24 @@ export default function NewUserGuide() {
           </div>
 
           {/* 操作按钮 */}
-          <div className="flex gap-3 p-4">
+          <div className="flex flex-wrap gap-3 p-4">
             <button
               onClick={handleSkip}
-              className="flex-1 py-2.5 rounded-xl text-ink-900/60 hover:bg-ink-50 transition font-medium"
+              className="flex-1 min-w-[80px] py-2.5 rounded-xl text-ink-900/60 hover:bg-ink-50 transition font-medium"
             >
               跳过
             </button>
+            {currentStepData.link && (
+              <button
+                onClick={handleGoTo}
+                className="flex-1 min-w-[80px] py-2.5 rounded-xl bg-iris-50 text-iris-700 font-medium hover:bg-iris-100 transition"
+              >
+                {currentStepData.link.label}
+              </button>
+            )}
             <button
               onClick={handleNext}
-              className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-iris-500 to-rose-400 text-white font-medium hover:shadow-lg transition flex items-center justify-center gap-2"
+              className="flex-1 min-w-[80px] py-2.5 rounded-xl bg-gradient-to-r from-iris-500 to-rose-400 text-white font-medium hover:shadow-lg transition flex items-center justify-center gap-2"
             >
               {currentStep < guideSteps.length - 1 ? (
                 <>

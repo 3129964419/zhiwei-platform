@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   User,
@@ -51,6 +51,11 @@ export default function Settings() {
   const remaining = user ? subscriptionService.getRemainingQuota(user.id) : null;
   const tier = user ? subscriptionService.getUserTier(user.id) : 'free';
   const isQuotaExhausted = tier === 'free' && remaining && remaining.tokens <= 0;
+
+  // 合并调用，避免重复执行相同计算
+  const dailyLimits = useMemo(() => billingService.getRemainingDailyLimits(), [user]);
+  const usagePercents = useMemo(() => billingService.getUsagePercentages(), [user]);
+  const dailyCost = useMemo(() => billingService.getDailyCost(), [user]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -578,42 +583,42 @@ export default function Settings() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-ink-900/70">对话 Token</span>
                 <span className="text-sm font-medium">
-                  {billingService.getRemainingDailyLimits().promptTokens.toLocaleString()}
+                  {dailyLimits.promptTokens.toLocaleString()}
                   <span className="text-ink-900/50 ml-1">/ 100,000</span>
                 </span>
               </div>
               <div className="h-1.5 bg-ink-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-iris-500 rounded-full transition-all"
-                  style={{ width: `${100 - billingService.getUsagePercentages().promptTokens}%` }}
+                  style={{ width: `${100 - usagePercents.promptTokens}%` }}
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-sm text-ink-900/70">语音合成</span>
                 <span className="text-sm font-medium">
-                  {billingService.getRemainingDailyLimits().ttsChars.toLocaleString()}
+                  {dailyLimits.ttsChars.toLocaleString()}
                   <span className="text-ink-900/50 ml-1">/ 10,000</span>
                 </span>
               </div>
               <div className="h-1.5 bg-ink-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-mint-500 rounded-full transition-all"
-                  style={{ width: `${100 - billingService.getUsagePercentages().ttsChars}%` }}
+                  style={{ width: `${100 - usagePercents.ttsChars}%` }}
                 />
               </div>
 
               <div className="flex items-center justify-between">
                 <span className="text-sm text-ink-900/70">语音克隆</span>
                 <span className="text-sm font-medium">
-                  {billingService.getRemainingDailyLimits().voiceClones}
+                  {dailyLimits.voiceClones}
                   <span className="text-ink-900/50 ml-1">/ 1</span>
                 </span>
               </div>
               <div className="h-1.5 bg-ink-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-coral-500 rounded-full transition-all"
-                  style={{ width: `${100 - billingService.getUsagePercentages().voiceClones}%` }}
+                  style={{ width: `${100 - usagePercents.voiceClones}%` }}
                 />
               </div>
 
@@ -621,7 +626,7 @@ export default function Settings() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-ink-900/70">今日预估费用</span>
                   <span className="text-sm font-medium text-iris-500">
-                    ¥{billingService.getDailyCost().toFixed(4)}
+                    ¥{dailyCost.toFixed(4)}
                   </span>
                 </div>
               </div>

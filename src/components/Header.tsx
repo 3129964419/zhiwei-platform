@@ -10,6 +10,8 @@ interface HeaderProps {
 export default function Header({ variant = 'transparent' }: HeaderProps) {
   const user = useUserStore((s) => s.user);
   const logout = useUserStore((s) => s.logout);
+  const toggleDarkMode = useDarkModeStore((s) => s.toggle);
+  const isDark = useDarkModeStore((s) => s.isDark);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
@@ -85,11 +87,11 @@ export default function Header({ variant = 'transparent' }: HeaderProps) {
           {user ? (
             <>
               <button
-                onClick={useDarkModeStore((s) => s.toggle)}
+                onClick={toggleDarkMode}
                 className="w-9 h-9 rounded-full bg-ink-100/50 flex items-center justify-center text-ink-900/70 hover:bg-ink-100 hover:text-ink-900 transition"
-                title={useDarkModeStore((s) => s.isDark ? '切换到浅色模式' : '切换到深色模式')}
+                title={isDark ? '切换到浅色模式' : '切换到深色模式'}
               >
-                {useDarkModeStore((s) => s.isDark ? <Sun size={16} /> : <Moon size={16} />)}
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
               </button>
               <Link
                 to="/pricing"

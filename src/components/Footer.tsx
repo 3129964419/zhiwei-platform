@@ -57,10 +57,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="flex items-center gap-2 hover:text-iris-500 transition">
+                <Link to="/help" className="flex items-center gap-2 hover:text-iris-500 transition">
                   <MessageCircle size={14} />
                   联系客服
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -81,10 +81,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="flex items-center gap-2 hover:text-iris-500 transition">
+                <Link to="/legal" className="flex items-center gap-2 hover:text-iris-500 transition">
                   <FileText size={14} />
                   内容规范
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

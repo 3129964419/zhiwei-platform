@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Send, Smile, Image as ImageIcon } from 'lucide-react';
+import { Send, Smile } from 'lucide-react';
 import { stickerCategories, detectStickerMood } from '@/data/stickers';
 import VoiceInput from './VoiceInput';
 
@@ -90,13 +90,6 @@ export default function ChatInput({ onSend, disabled, placeholder = '说点什�
           aria-label="表情包"
         >
           <Smile size={20} />
-        </button>
-
-        <button
-          className="w-9 h-9 rounded-2xl flex items-center justify-center hover:bg-iris-50 text-ink-900/60 hover:text-iris-500 transition shrink-0 hidden sm:flex"
-          aria-label="图片"
-        >
-          <ImageIcon size={18} />
         </button>
 
         <VoiceInput onResult={(text) => onSend(text, 'voice')} />

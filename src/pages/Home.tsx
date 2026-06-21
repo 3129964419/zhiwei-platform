@@ -408,7 +408,7 @@ export default function Home() {
               {[
                 { icon: '🧠', text: '思维链 · 懂你逻辑' },
                 { icon: '❤️', text: '情感态 · 真实情绪' },
-                { icon: '�', text: '记忆库 · 不忘点滴' },
+                { icon: '📚', text: '记忆库 · 不忘点滴' },
                 { icon: '🌱', text: '养成系 · 越聊越像' },
                 { icon: '🔒', text: '本地处理 · 隐私安全' },
               ].map((item, i) => (

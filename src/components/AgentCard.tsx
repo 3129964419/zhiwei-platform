@@ -113,7 +113,8 @@ export default function AgentCard({ agent, compact = false }: AgentCardProps) {
             e.preventDefault();
             setMenuOpen(!menuOpen);
           }}
-          className="w-7 h-7 rounded-full bg-white/80 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 transition hover:bg-white"
+          className="w-7 h-7 rounded-full bg-white/80 backdrop-blur flex items-center justify-center opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition hover:bg-white"
+          aria-label="更多操作"
         >
           <MoreHorizontal size={14} className="text-ink-900" />
         </button>
