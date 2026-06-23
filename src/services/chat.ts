@@ -38,7 +38,7 @@ const DEFAULT_RETRY_OPTIONS: RetryOptions = {
 // 默认超时时间
 const DEFAULT_TIMEOUT = 60000; // 60秒
 
-const MOCK_MODE = import.meta.env.DEV || !import.meta.env.VITE_VOLCANO_API_KEY && !import.meta.env.VITE_MINIMAX_API_KEY && !apiConfig.hasAPIKey();
+const MOCK_MODE = !import.meta.env.VITE_VOLCANO_API_KEY && !import.meta.env.VITE_MINIMAX_API_KEY && !apiConfig.hasAPIKey();
 
 function getProvider(): APIProvider {
   if (import.meta.env.VITE_VOLCANO_API_KEY) return 'volcano';
