@@ -136,7 +136,7 @@ export const chatService = {
         throw new Error('今日对话免费额度已用完，请明日再试');
       }
 
-      const model = import.meta.env.VITE_VOLCANO_MODEL || 'doubao-seed-2.0-lite';
+      const model = import.meta.env.VITE_VOLCANO_ENDPOINT_ID || import.meta.env.VITE_VOLCANO_MODEL || 'doubao-seed-2.0-lite';
       const allMessages: ChatMessage[] = [];
 
       if (options.systemPrompt) {
@@ -252,7 +252,7 @@ export const chatService = {
         throw new Error('今日对话免费额度已用完，请明日再试');
       }
       
-      const model = import.meta.env.VITE_VOLCANO_MODEL || 'doubao-seed-2.0-lite';
+      const model = import.meta.env.VITE_VOLCANO_ENDPOINT_ID || import.meta.env.VITE_VOLCANO_MODEL || 'doubao-seed-2.0-lite';
       const allMessages: ChatMessage[] = [];
       
       if (options.systemPrompt) {
