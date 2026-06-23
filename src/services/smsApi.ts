@@ -7,8 +7,8 @@
 // 使用相对路径，因为 API 和前端部署在同一域名
 const SMS_API_BASE = import.meta.env.VITE_SMS_API_URL || '/api/sms';
 
-// 模拟模式 (开发环境)
-const MOCK_MODE = import.meta.env.DEV;
+// 模拟模式 (开发环境或未配置 SMS API)
+const MOCK_MODE = import.meta.env.DEV || !import.meta.env.VITE_SMS_API_URL;
 
 /**
  * 发送验证码

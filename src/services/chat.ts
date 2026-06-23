@@ -38,6 +38,8 @@ const DEFAULT_RETRY_OPTIONS: RetryOptions = {
 // 默认超时时间
 const DEFAULT_TIMEOUT = 60000; // 60秒
 
+const MOCK_MODE = import.meta.env.DEV || !import.meta.env.VITE_VOLCANO_API_KEY && !import.meta.env.VITE_MINIMAX_API_KEY && !apiConfig.hasAPIKey();
+
 function getProvider(): APIProvider {
   if (import.meta.env.VITE_VOLCANO_API_KEY) return 'volcano';
   if (import.meta.env.VITE_MINIMAX_API_KEY) return 'minimax';
@@ -99,6 +101,29 @@ export const chatService = {
   },
 
   async _sendMessageInternal(options: ChatCompletionOptions): Promise<ChatResult> {
+    if (MOCK_MODE) {
+      await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random() * 1500));
+      const mockResponses = [
+        '嗯嗯，我懂你的感受呢。要不要我陪你聊聊？',
+        '好的呀，我在这里陪你呢～',
+        '我理解你的想法，让我们一起想想办法吧。',
+        '你说的很有道理，继续说，我在听。',
+        '谢谢你愿意和我分享这些，我会一直陪着你的。',
+      ];
+      const lastMessage = options.messages[options.messages.length - 1];
+      const response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+      console.log(`[Chat Mock] User: ${lastMessage.content} -> AI: ${response}`);
+      return {
+        content: response,
+        usage: {
+          promptTokens: lastMessage.content.length,
+          completionTokens: response.length,
+          totalTokens: lastMessage.content.length + response.length,
+        },
+        cost: 0,
+      };
+    }
+
     const provider = getProvider();
 
     if (provider === 'volcano') {
@@ -197,6 +222,24 @@ export const chatService = {
     onChunk: (chunk: string) => void,
     onComplete?: () => void
   ): Promise<void> {
+    if (MOCK_MODE) {
+      const mockResponses = [
+        '嗯嗯，我懂你的感受呢。要不要我陪你聊聊？',
+        '好的呀，我在这里陪你呢～',
+        '我理解你的想法，让我们一起想想办法吧。',
+        '你说的很有道理，继续说，我在听。',
+        '谢谢你愿意和我分享这些，我会一直陪着你的。',
+      ];
+      const response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+      const chars = response.split('');
+      for (let i = 0; i < chars.length; i++) {
+        onChunk(chars[i]);
+        await new Promise((resolve) => setTimeout(resolve, 50 + Math.random() * 80));
+      }
+      if (onComplete) onComplete();
+      return;
+    }
+
     const provider = getProvider();
     
     if (provider === 'volcano') {
@@ -274,6 +317,7 @@ export const chatService = {
   },
   
   isAvailable(): boolean {
+    if (MOCK_MODE) return true;
     if (import.meta.env.VITE_VOLCANO_API_KEY && import.meta.env.VITE_VOLCANO_ENDPOINT_ID) {
       return true;
     }
